@@ -64,7 +64,7 @@ export async function POST(request: NextRequest) {
     });
 
     // Build with base URL
-    const base = "https://cs-391-mp5-eight.vercel.app/";
+    const base = "https://cs-391-mp5-nine.vercel.app/";
 
     // Return success response with shortened URL
     return NextResponse.json(
