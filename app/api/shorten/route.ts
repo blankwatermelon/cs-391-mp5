@@ -1,11 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import getCollection, { URLS_COLLECTION } from "../../lib/db";
-import {
-  ShortenUrlRequest,
-  ShortenUrlResponse,
-  ErrorResponse,
-  UrlDocument,
-} from "@/types/types";
+
 
 // URL validation function
 function isValidUrl(url: string): boolean {
