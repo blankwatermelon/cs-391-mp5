@@ -49,9 +49,9 @@ export default function Home() {
   };
 
   return (
-    <main className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
-      <div className="max-w-md w-full bg-white rounded-lg shadow-lg p-8">
-        <h1 className="text-3xl font-bold text-center mb-8 text-black">
+    <main className="min-h-screen flex items-center justify-center bg-rose-50 p-4">
+      <div className="max-w-md w-full bg-white rounded-lg shadow-lg p-8 border border-rose-300">
+        <h1 className="text-3xl font-bold text-center mb-8 text-rose-900">
           URL Shortener
         </h1>
 
@@ -74,25 +74,25 @@ export default function Home() {
           />
 
           {error && (
-            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-md">
+            <div className="bg-red-50 border border-red-300 text-red-800 px-4 py-3 rounded-md">
               {error}
             </div>
           )}
 
           {shortUrl && (
-            <div className="bg-green-50 border border-green-200 rounded-md p-4">
-              <p className="text-sm text-black mb-2">Your shortened URL:</p>
+            <div className="bg-rose-50 border border-rose-300 rounded-md p-4">
+              <p className="text-sm text-rose-900 mb-2">Your shortened URL:</p>
               <div className="flex items-center gap-2">
                 <input
                   type="text"
                   value={shortUrl}
                   readOnly
-                  className="flex-1 px-3 py-2 bg-white border border-gray-300 rounded-md text-sm text-green-800"
+                  className="flex-1 px-3 py-2 bg-white border border-rose-300 rounded-md text-sm text-rose-800"
                 />
                 <button
                   type="button"
                   onClick={copyToClipboard}
-                  className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 text-sm font-medium"
+                  className="px-4 py-2 bg-rose-600 text-white rounded-md hover:bg-rose-700 text-sm font-medium"
                 >
                   Copy
                 </button>
@@ -103,7 +103,7 @@ export default function Home() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 font-medium disabled:bg-gray-400 disabled:cursor-not-allowed"
+            className="w-full bg-rose-600 text-white py-2 px-4 rounded-md hover:bg-rose-700 font-medium disabled:bg-gray-400 disabled:cursor-not-allowed"
           >
             {loading ? "Creating..." : "Shorten URL"}
           </button>
