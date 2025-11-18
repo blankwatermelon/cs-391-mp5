@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import FormInput from "./components/FormInput";
 
 export default function Home() {
   const [url, setUrl] = useState("");
@@ -55,44 +56,22 @@ export default function Home() {
         </h1>
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label
-              htmlFor="url"
-              className="block text-sm font-medium text-black mb-1"
-            >
-              Original URL
-            </label>
-            <input
-              type="text"
-              id="url"
-              value={url}
-              onChange={(e) => setUrl(e.target.value)}
-              placeholder="https://example.com"
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent text-black"
-              required
-            />
-          </div>
+          <FormInput
+            id="url"
+            label="Original URL"
+            value={url}
+            onChange={setUrl}
+            placeholder="https://example.com"
+          />
 
-          <div>
-            <label
-              htmlFor="alias"
-              className="block text-sm font-medium text-black mb-1"
-            >
-              Custom Alias
-            </label>
-            <input
-              type="text"
-              id="alias"
-              value={alias}
-              onChange={(e) => setAlias(e.target.value)}
-              placeholder="my-link"
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent text-black"
-              required
-            />
-            <p className="text-xs font-bold text-black mt-1">
-              Letters, numbers, and hyphens only
-            </p>
-          </div>
+          <FormInput
+            id="alias"
+            label="Custom Alias"
+            value={alias}
+            onChange={setAlias}
+            placeholder="my-link"
+            helperText="Letters, numbers, and hyphens only"
+          />
 
           {error && (
             <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-md">

@@ -1,85 +1,41 @@
-import { NextRequest, NextResponse } from "next/server";
-import getCollection, { URLS_COLLECTION } from "../../lib/db";
+import { NextRequest } from "next/server";
+import { validateRequiredFields, validateUrl, validateAlias } from "../../lib/validators";
+import { checkAliasExists, createShortUrl } from "../../lib/url-service";
+import { errorResponse, successResponse } from "../../lib/api-response";
 
-
-// URL validation function
-function isValidUrl(url: string): boolean {
-  try {
-    const urlObj = new URL(url);
-    return urlObj.protocol === "http:" || urlObj.protocol === "https:";
-  } catch {
-    return false;
-  }
-}
-
-// POST: Create a new shortened URL
 export async function POST(request: NextRequest) {
   try {
-    // Parse request body
-    const body = await request.json();
-    const { url, alias } = body;
+    // Parse request
+    const { url, alias } = await request.json();
 
-    // Validate that both fields are provided
-    if (!url || !alias) {
-      return NextResponse.json(
-        { error: "URL and alias are required" },
-        { status: 400 }
-      );
+    // Validate inputs
+    const requiredError = validateRequiredFields(url, alias);
+    if (requiredError) return errorResponse(requiredError, 400);
+
+    const urlError = validateUrl(url);
+    if (urlError) return errorResponse(urlError, 400);
+
+    const aliasError = validateAlias(alias);
+    if (aliasError) return errorResponse(aliasError, 400);
+
+    // Check if alias exists
+    if (await checkAliasExists(alias)) {
+      return errorResponse("This alias is already taken. Please choose another.", 409);
     }
 
-    // Validate URL format
-    if (!isValidUrl(url)) {
-      return NextResponse.json(
-        { error: "Invalid URL. Please enter a valid HTTP or HTTPS URL." },
-        { status: 400 }
-      );
-    }
+    // Create short URL
+    await createShortUrl(url, alias);
 
-    // Validate alias format
-    const aliasRegex = /^[a-zA-Z0-9-]+$/;
-    if (!aliasRegex.test(alias)) {
-      return NextResponse.json(
-        { error: "Alias can only contain letters, numbers, and hyphens" },
-        { status: 400 }
-      );
-    }
-
-    // Get the collection
-    const collection = await getCollection(URLS_COLLECTION);
-
-    // Check if alias already exists
-    const existingAlias = await collection.findOne({ alias });
-    if (existingAlias) {
-      return NextResponse.json(
-        { error: "This alias is already taken. Please choose another." },
-        { status: 409 } // 409 Conflict
-      );
-    }
-
-    // Insert the new URL mapping into database
-    await collection.insertOne({
-      url,
+    // Return success
+    const base = "https://cs-391-mp5-nine.vercel.app";
+    return successResponse({
+      success: true,
       alias,
-      createdAt: new Date(),
-    });
+      shortUrl: `${base}/${alias}`,
+    }, 201);
 
-    // Build with base URL
-    const base = "https://cs-391-mp5-nine.vercel.app/";
-
-    // Return success response with shortened URL
-    return NextResponse.json(
-      {
-        success: true,
-        alias,
-        shortUrl: `${base}/${alias}`,
-      },
-      { status: 201 } // 201 Created
-    );
   } catch (error) {
     console.error("Error creating short URL:", error);
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 }
-    );
+    return errorResponse("Internal server error", 500);
   }
 }
