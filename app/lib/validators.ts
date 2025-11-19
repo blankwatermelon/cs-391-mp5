@@ -1,4 +1,5 @@
 // only handles validation
+
 export function validateRequiredFields(
   url: string,
   alias: string

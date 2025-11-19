@@ -1,5 +1,9 @@
 import { NextRequest } from "next/server";
-import { validateRequiredFields, validateUrl, validateAlias } from "../../lib/validators";
+import {
+  validateRequiredFields,
+  validateUrl,
+  validateAlias,
+} from "../../lib/validators";
 import { checkAliasExists, createShortUrl } from "../../lib/url-service";
 import { errorResponse, successResponse } from "../../lib/api-response";
 
@@ -20,7 +24,10 @@ export async function POST(request: NextRequest) {
 
     // Check if alias exists
     if (await checkAliasExists(alias)) {
-      return errorResponse("This alias is already taken. Please choose another.", 409);
+      return errorResponse(
+        "This alias is already taken. Please choose another.",
+        409
+      );
     }
 
     // Create short URL
@@ -28,12 +35,14 @@ export async function POST(request: NextRequest) {
 
     // Return success
     const base = "https://cs-391-mp5-nine.vercel.app";
-    return successResponse({
-      success: true,
-      alias,
-      shortUrl: `${base}/${alias}`,
-    }, 201);
-
+    return successResponse(
+      {
+        success: true,
+        alias,
+        shortUrl: `${base}/${alias}`,
+      },
+      201
+    );
   } catch (error) {
     console.error("Error creating short URL:", error);
     return errorResponse("Internal server error", 500);
