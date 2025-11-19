@@ -1,10 +1,11 @@
 import getCollection, { URLS_COLLECTION } from "./db";
 
-// only handles URL database operations 
+// only handles URL database operations
+
 export async function checkAliasExists(alias: string): Promise<boolean> {
   const collection = await getCollection(URLS_COLLECTION);
   const existing = await collection.findOne({ alias });
-  return !!existing;
+  return existing !== null;
 }
 
 export async function createShortUrl(url: string, alias: string) {
